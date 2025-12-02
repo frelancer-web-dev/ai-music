@@ -2,157 +2,268 @@
 // PROMPTS.JS - Промпти для генерації пісень
 // ============================================
 
-const Prompts = {
-    // ========== ТЕСТ API ==========
-    test: () => {
-        return 'Напиши одне коротке речення українською про музику.';
-    },
-    
-    // ========== ГЕНЕРАЦІЯ ТЕКСТУ ПІСНІ ==========
-    poem: (params) => {
-        let prompt = `Напиши текст пісні українською мовою.
+// Мовні налаштування за замовчуванням
+const DEFAULT_LANGUAGE = 'uk';
 
-Тема: ${params.theme}
-Настрій: ${params.mood}
-Жанр: ${params.style}`;
+// Словник мовних налаштувань
+const LANGUAGE_SETTINGS = {
+    uk: {
+        name: 'українською',
+        structure: {
+            verse: 'Куплет',
+            chorus: 'Приспів',
+            bridge: 'Бридж',
+            intro: 'Вступ',
+            outro: 'Завершення'
+        },
+        prompts: {
+            test: 'Напиши одне коротке речення українською про музику.',
+            poem: (params) => {
+                let prompt = `Напиши текст пісні українською мовою.\n\nТема: ${params.theme}\nНастрій: ${params.mood}\nЖанр: ${params.style}`;
 
-        if (params.template) {
-            const template = params.template;
-            prompt += `\nСтруктура: ${template.name}`;
-            
-            if (template.structure) {
-                prompt += `\nФорма: ${template.structure}`;
-            }
-        }
-        
-        if (params.additionalDetails) {
-            prompt += `\nДодаткові вимоги: ${params.additionalDetails}`;
-        }
-        
-        if (params.poemNumber) {
-            prompt += `\n\nЦе пісня №${params.poemNumber} з альбому.`;
-        }
+                if (params.template) {
+                    const template = params.template;
+                    prompt += `\nСтруктура: ${template.name}`;
+                    
+                    if (template.structure) {
+                        prompt += `\nФорма: ${template.structure}`;
+                    }
+                }
+                
+                if (params.additionalDetails) {
+                    prompt += `\nДодаткові вимоги: ${params.additionalDetails}`;
+                }
+                
+                if (params.poemNumber) {
+                    prompt += `\n\nЦе пісня №${params.poemNumber} з альбому.`;
+                }
 
-        prompt += `\n\n⚠️ ВАЖЛИВО: 
+                prompt += `\n\n⚠️ ВАЖЛИВО: 
 - Поверни ТІЛЬКИ текст пісні без назви
 - Використовуй позначки [Куплет 1], [Приспів], [Бридж] тощо для структури
 - Рими мають бути природними
 - Текст має співатися
 - Без пояснень та коментарів`;
-        
-        return prompt;
+                
+                return prompt;
+            },
+            poemTitle: (params) => {
+                return `Придумай яскраву назву для пісні на тему "${params.theme}" в ${params.mood} настрої для жанру ${params.style}.\n\n⚠️ ВАЖЛИВО: Поверни тільки назву, одну коротку фразу (2-4 слова), без лапок, без пояснень.`;
+            },
+            improvePoem: (text) => `Покращ текст пісні, зберігаючи зміст та структуру:\n\n${text}\n\nПокращений варіант (без коментарів):`,
+            continuePoem: (text, lines) => `Додай ще ${lines} рядків до цього тексту пісні, зберігаючи стиль та тему:\n\n${text}\n\nПродовження (без коментарів):`,
+            findRhyme: (word) => `Знайди риму до слова "${word}". Поверни тільки список слів-рим, розділених комами, без пояснень.`,
+            findSynonyms: (word) => `Знайди синоніми до слова "${word}". Поверни тільки список слів, розділених комами, без пояснень.`,
+            analyzeMeter: (text) => `Проаналізуй ритм наведеного тексту пісні та поверни результат у форматі: "Розмір: [назва розміру]\nРитм: [опис ритму]\nРекомендації: [поради щодо покращення]".\n\n${text}`,
+            collectionIntro: (params) => `Напиши короткий вступ до музичного альбому під назвою "${params.title}" у жанрі ${params.genre} з наступним описом: ${params.description}.`,
+            generateThematicSet: (params) => `Придумай ${params.count} назв пісень для альбому на тему "${params.theme}" у жанрі ${params.genre}.`,
+            generateHook: (theme, mood) => `Придумай причіпляючий куплет (хук) для пісні на тему "${theme}" у ${mood} настрої.`,
+            generateBridge: (verseText) => `На основі наведеного куплету створи бридж, який логічно продовжить пісню:\n\n${verseText}\n\nБридж (без коментарів):`
+        }
+    },
+    en: {
+        name: 'English',
+        structure: {
+            verse: 'Verse',
+            chorus: 'Chorus',
+            bridge: 'Bridge',
+            intro: 'Intro',
+            outro: 'Outro'
+        },
+        prompts: {
+            test: 'Write one short sentence in English about music.',
+            poem: (params) => {
+                let prompt = `Write song lyrics in English.\n\nTheme: ${params.theme}\nMood: ${params.mood}\nGenre: ${params.style}`;
+
+                if (params.template) {
+                    const template = params.template;
+                    prompt += `\nStructure: ${template.name}`;
+                    
+                    if (template.structure) {
+                        prompt += `\nForm: ${template.structure}`;
+                    }
+                }
+                
+                if (params.additionalDetails) {
+                    prompt += `\nAdditional requirements: ${params.additionalDetails}`;
+                }
+                
+                if (params.poemNumber) {
+                    prompt += `\n\nThis is song #${params.poemNumber} from the album.`;
+                }
+
+                prompt += `\n\n⚠️ IMPORTANT: 
+- Return ONLY the song lyrics without a title
+- Use labels like [Verse 1], [Chorus], [Bridge] for structure
+- Rhymes should sound natural
+- The text should be singable
+- No explanations or comments`;
+                
+                return prompt;
+            },
+            poemTitle: (params) => {
+                return `Come up with a catchy title for a song about "${params.theme}" with a ${params.mood} mood in the ${params.style} genre.\n\nIMPORTANT: Return only the title, one short phrase (2-4 words), without quotes or explanations.`;
+            },
+            improvePoem: (text) => `Improve the following song lyrics while maintaining the meaning and structure:\n\n${text}\n\nImproved version (no comments):`,
+            continuePoem: (text, lines) => `Add ${lines} more lines to this song, maintaining the style and theme:\n\n${text}\n\nContinuation (no comments):`,
+            findRhyme: (word) => `Find rhymes for the word "${word}". Return only a comma-separated list of rhyming words, no explanations.`,
+            findSynonyms: (word) => `Find synonyms for the word "${word}". Return only a comma-separated list of words, no explanations.`,
+            analyzeMeter: (text) => `Analyze the meter of the following song lyrics and return the result in the format: "Meter: [meter name]\nRhythm: [rhythm description]\nRecommendations: [improvement suggestions]".\n\n${text}`,
+            collectionIntro: (params) => `Write a short introduction for a music album titled "${params.title}" in the ${params.genre} genre with the following description: ${params.description}.`,
+            generateThematicSet: (params) => `Generate ${params.count} song titles for an album about "${params.theme}" in the ${params.genre} genre.`,
+            generateHook: (theme, mood) => `Come up with a catchy hook for a song about "${theme}" with a ${mood} mood.`,
+            generateBridge: (verseText) => `Based on the following verse, create a bridge that logically continues the song:\n\n${verseText}\n\nBridge (no comments):`
+        }
+    },
+    ru: {
+        name: 'русском',
+        structure: {
+            verse: 'Куплет',
+            chorus: 'Припев',
+            bridge: 'Бридж',
+            intro: 'Вступление',
+            outro: 'Завершение'
+        },
+        prompts: {
+            test: 'Напиши одно короткое предложение на русском о музыке.',
+            poem: (params) => {
+                let prompt = `Напиши текст песни на русском языке.\n\nТема: ${params.theme}\nНастроение: ${params.mood}\nЖанр: ${params.style}`;
+
+                if (params.template) {
+                    const template = params.template;
+                    prompt += `\nСтруктура: ${template.name}`;
+                    
+                    if (template.structure) {
+                        prompt += `\nФорма: ${template.structure}`;
+                    }
+                }
+                
+                if (params.additionalDetails) {
+                    prompt += `\nДополнительные требования: ${params.additionalDetails}`;
+                }
+                
+                if (params.poemNumber) {
+                    prompt += `\n\nЭто песня №${params.poemNumber} из альбома.`;
+                }
+
+                prompt += `\n\n⚠️ ВАЖНО: 
+- Верни ТОЛЬКО текст песни без названия
+- Используй пометки [Куплет 1], [Припев], [Бридж] и т.д. для структуры
+- Рифмы должны быть естественными
+- Текст должен быть удобен для пения
+- Без объяснений и комментариев`;
+                
+                return prompt;
+            },
+            poemTitle: (params) => {
+                return `Придумай яркое название для песни на тему "${params.theme}" в ${params.mood} настроении для жанра ${params.style}.\n\nВАЖНО: Верни только название, одну короткую фразу (2-4 слова), без кавычек, без объяснений.`;
+            },
+            improvePoem: (text) => `Улучши текст песни, сохраняя содержание и структуру:\n\n${text}\n\nУлучшенный вариант (без комментариев):`,
+            continuePoem: (text, lines) => `Добавь еще ${lines} строк к этому тексту песни, сохраняя стиль и тему:\n\n${text}\n\nПродолжение (без комментариев):`,
+            findRhyme: (word) => `Найди рифму к слову "${word}". Верни только список слов-рифм, разделенных запятыми, без объяснений.`,
+            findSynonyms: (word) => `Найди синонимы к слову "${word}". Верни только список слов, разделенных запятыми, без объяснений.`,
+            analyzeMeter: (text) => `Проанализируй ритм приведенного текста песни и верни результат в формате: "Размер: [название размера]\nРитм: [описание ритма]\nРекомендации: [советы по улучшению]".\n\n${text}`,
+            collectionIntro: (params) => `Напиши краткое вступление к музыкальному альбому под названием "${params.title}" в жанре ${params.genre} со следующим описанием: ${params.description}.`,
+            generateThematicSet: (params) => `Придумай ${params.count} названий песен для альбома на тему "${params.theme}" в жанре ${params.genre}.`,
+            generateHook: (theme, mood) => `Придумай цепляющий куплет (хук) для песни на тему "${theme}" в ${mood} настроении.`,
+            generateBridge: (verseText) => `На основе приведенного куплета создай бридж, который логично продолжит песню:\n\n${verseText}\n\nБридж (без комментариев):`
+        }
+    }
+};
+
+const Prompts = {
+    // Отримання поточного об'єкту мови
+    _getLanguageSettings: function(language) {
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        return LANGUAGE_SETTINGS[language] || LANGUAGE_SETTINGS[DEFAULT_LANGUAGE];
+    },
+
+    // Отримання структури для поточної мови
+    getStructure: function(language) {
+        return this._getLanguageSettings(language).structure;
+    },
+
+    // ========== ТЕСТ API ==========
+    test: function(language) {
+        return this._getLanguageSettings(language).prompts.test;
+    },
+    
+    // ========== ГЕНЕРАЦІЯ ТЕКСТУ ПІСНІ ==========
+    poem: function(params, language) {
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        const settings = this._getLanguageSettings(language);
+        return settings.prompts.poem(params);
     },
     
     // ========== ГЕНЕРАЦІЯ НАЗВИ ПІСНІ ==========
-    poemTitle: (params) => {
-        return `Придумай яскраву назву для пісні на тему "${params.theme}" в ${params.mood} настрої для жанру ${params.style}.
-
-⚠️ ВАЖЛИВО: Поверни тільки назву, одну коротку фразу (2-4 слова), без лапок, без пояснень.`;
+    poemTitle: function(params, language) {
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        const settings = this._getLanguageSettings(language);
+        return settings.prompts.poemTitle(params);
     },
     
     // ========== ПОКРАЩЕННЯ ТЕКСТУ ==========
-    improvePoem: (text) => {
-        return `Покращ наступний текст пісні, зберігаючи структуру але зробивши його більш виразним, емоційним та придатним для співу:
-
-${text}
-
-⚠️ ВАЖЛИВО: 
-- Збережи структуру [Куплет], [Приспів] тощо
-- Покращ рими та ритм
-- Зроби більш співучим
-- Поверни тільки покращений текст без коментарів`;
+    improvePoem: function(text, language) {
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        const settings = this._getLanguageSettings(language);
+        return settings.prompts.improvePoem(text);
     },
     
     // ========== ДОДАВАННЯ КУПЛЕТА ==========
-    continuePoem: (text, lines) => {
-        return `Додай ще один куплет до наступної пісні, зберігаючи стиль, настрій та ритм:
-
-${text}
-
-⚠️ ВАЖЛИВО: 
-- Поверни тільки новий куплет
-- Познач його як [Куплет 3]
-- Збережи загальний стиль пісні`;
+    continuePoem: function(text, lines, language) {
+        lines = lines || 4;
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        const settings = this._getLanguageSettings(language);
+        return settings.prompts.continuePoem(text, lines);
     },
     
     // ========== ГЕНЕРАЦІЯ РИМИ ==========
-    findRhyme: (word) => {
-        return `Дай 10 українських слів, які римуються зі словом "${word}" і підходять для текстів пісень.
-
-⚠️ ВАЖЛИВО: Поверни список через кому, тільки слова, без номерів, без пояснень.
-
-Приклад формату: слово1, слово2, слово3, ...`;
+    findRhyme: function(word, language) {
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        const settings = this._getLanguageSettings(language);
+        return settings.prompts.findRhyme(word);
     },
     
     // ========== СИНОНІМИ ==========
-    findSynonyms: (word) => {
-        return `Дай 10 синонімів українською до слова "${word}", які добре звучать у піснях.
-
-⚠️ ВАЖЛИВО: Поверни список через кому, тільки слова, без номерів, без пояснень.
-
-Приклад формату: слово1, слово2, слово3, ...`;
+    findSynonyms: function(word, language) {
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        const settings = this._getLanguageSettings(language);
+        return settings.prompts.findSynonyms(word);
     },
     
     // ========== АНАЛІЗ РИТМУ ==========
-    analyzeMeter: (text) => {
-        return `Проаналізуй ритм та структуру наступного тексту пісні:
-
-${text}
-
-⚠️ ВАЖЛИВО: Поверни ТІЛЬКИ JSON без жодного додаткового тексту:
-
-{
-  "meter": "опис ритмічної структури",
-  "rhythm": "оцінка придатності для співу (1-2 речення)",
-  "consistency": 8,
-  "suggestions": "короткі поради для покращення"
-}
-
-consistency — це оцінка ритмічності від 1 до 10 (число).`;
+    analyzeMeter: function(text, language) {
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        const settings = this._getLanguageSettings(language);
+        return settings.prompts.analyzeMeter(text);
     },
     
     // ========== ГЕНЕРАЦІЯ ВСТУПУ ДО АЛЬБОМУ ==========
-    collectionIntro: (params) => {
-        return `Напиши короткий опис (2-3 речення) до музичного альбому "${params.title}" 
-на тему "${params.theme}" в ${params.mood} настрої, жанр ${params.style}.
-
-⚠️ ВАЖЛИВО: Тільки текст опису, без заголовків.`;
+    collectionIntro: function(params, language) {
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        const settings = this._getLanguageSettings(language);
+        return settings.prompts.collectionIntro(params);
     },
     
     // ========== ГЕНЕРАЦІЯ НАЗВ ПІСЕНЬ ==========
-    generateThematicSet: (params) => {
-        return `Згенеруй ${params.count} назв для пісень на тему "${params.theme}" 
-в ${params.mood} настрої, жанр ${params.style}.
-
-⚠️ ВАЖЛИВО: Поверни ТІЛЬКИ JSON без жодного додаткового тексту:
-
-[
-  {"title": "Назва 1", "keywords": ["ключове слово 1", "ключове слово 2"]},
-  {"title": "Назва 2", "keywords": ["ключове слово 1", "ключове слово 2"]}
-]`;
+    generateThematicSet: function(params, language) {
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        const settings = this._getLanguageSettings(language);
+        return settings.prompts.generateThematicSet(params);
     },
     
     // ========== ГЕНЕРАЦІЯ ХУКУ ==========
-    generateHook: (theme, mood) => {
-        return `Придумай короткий запам'ятовуваний хук (2-4 рядки) для пісні на тему "${theme}" в ${mood} настрої.
-
-⚠️ ВАЖЛИВО: 
-- Має легко запам'ятовуватися
-- Повторювані елементи вітаються
-- Тільки текст хуку, без пояснень`;
+    generateHook: function(theme, mood, language) {
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        const settings = this._getLanguageSettings(language);
+        return settings.prompts.generateHook(theme, mood);
     },
     
     // ========== ГЕНЕРАЦІЯ БРИДЖУ ==========
-    generateBridge: (verseText) => {
-        return `Напиши бридж (міст) для наступної пісні, який буде контрастувати з куплетами:
-
-${verseText}
-
-⚠️ ВАЖЛИВО:
-- 4-8 рядків
-- Інша мелодія/ритм
-- Поглиблює зміст
-- Познач як [Бридж]`;
+    generateBridge: function(verseText, language) {
+        language = language || (typeof LOCALE !== 'undefined' ? LOCALE.getLanguage() : DEFAULT_LANGUAGE);
+        const settings = this._getLanguageSettings(language);
+        return settings.prompts.generateBridge(verseText);
     }
 };
 

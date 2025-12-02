@@ -4,41 +4,41 @@
 
 /* ===== CSS VARIABLES ===== */
 :root, [data-theme="dark"] {
-    --color-bg-primary: #0a0a0a;
-    --color-bg-secondary: #111111;
-    --color-bg-tertiary: #1a1a1a;
-    --color-bg-card: #141414;
-    --color-text-primary: #ffffff;
-    --color-text-secondary: #a0a0a0;
-    --color-text-tertiary: #707070;
-    --color-accent: #f59e0b;
-    --color-accent-hover: #d97706;
-    --color-success: #10b981;
-    --color-error: #ef4444;
-    --color-warning: #f59e0b;
-    --color-border: #2a2a2a;
+    --color-bg-primary: #0a0f0a;
+    --color-bg-secondary: #111911;
+    --color-bg-tertiary: #1a221a;
+    --color-bg-card: #141e14;
+    --color-text-primary: #f0fff0;
+    --color-text-secondary: #a0c0a0;
+    --color-text-tertiary: #709070;
+    --color-accent: #4caf50;
+    --color-accent-hover: #3d8b40;
+    --color-success: #2e7d32;
+    --color-error: #d32f2f;
+    --color-warning: #ed6c02;
+    --color-border: #2a3a2a;
     --radius-sm: 0.5rem;
     --radius-md: 0.75rem;
     --radius-lg: 1rem;
     --radius-xl: 1.5rem;
     --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
-    --gradient-primary: linear-gradient(135deg, #f59e0b 0%, #dc2626 100%);
+    --gradient-primary: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
 }
 
 [data-theme="light"] {
-    --color-bg-primary: #f5f5f5;
+    --color-bg-primary: #f0f7f0;
     --color-bg-secondary: #ffffff;
-    --color-bg-tertiary: #e5e5e5;
+    --color-bg-tertiary: #e0e8e0;
     --color-bg-card: #ffffff;
-    --color-text-primary: #1a1a1a;
-    --color-text-secondary: #666666;
-    --color-text-tertiary: #999999;
-    --color-accent: #f59e0b;
-    --color-accent-hover: #d97706;
-    --color-success: #10b981;
-    --color-error: #ef4444;
-    --color-warning: #f59e0b;
-    --color-border: #e0e0e0;
+    --color-text-primary: #0a1e0a;
+    --color-text-secondary: #2e4a2e;
+    --color-text-tertiary: #5c7a5c;
+    --color-accent: #4caf50;
+    --color-accent-hover: #3d8b40;
+    --color-success: #2e7d32;
+    --color-error: #d32f2f;
+    --color-warning: #ed6c02;
+    --color-border: #c8e0c8;
     --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
 

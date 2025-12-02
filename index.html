@@ -3,39 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ШІ-Музикант v1.0 - генератор текстів пісень з AI">
-    <title>ШІ-Музикант v1.0 - Генератор Текстів Пісень</title>
+    <meta name="description" data-i18n="appDescription">
+    <title data-i18n="appTitle">ШІ-Музикант v1.0 - Генератор Текстів Пісень</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/content.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/core/locale.js"></script>
 </head>
 <body data-theme="dark">
     <div id="toast-container"></div>
     <div id="modal-container"></div>
 
     <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <span class="logo-icon">🎵</span>
-                    <span>ШІ-Музикант v1.0</span>
+        <div class="container header-content">
+            <h1 class="logo" data-i18n="appName">ШІ-Музикант</h1>
+            <div class="language-selector">
+                <select id="language-selector" class="form-select" onchange="LOCALE.setLanguage(this.value)" data-i18n="language">
+                    <option value="uk" data-i18n="ukrainian">Українська</option>
+                    <option value="en" data-i18n="english">English</option>
+                    <option value="ru" data-i18n="russian">Русский</option>
+                </select>
+            </div>
+            <div class="logo">
+                <span class="logo-icon">🎵</span>
+                <span data-i18n="appName">ШІ-Музикант</span>
+                <span class="version" data-i18n="version">v1.0</span>
+            </div>
+            <div class="header-stats">
+                <div class="stat-badge">
+                    <span>💿</span>
+                    <span id="currentCollectionName" data-i18n="newAlbum">Новий альбом</span>
                 </div>
-                <div class="header-stats">
-                    <div class="stat-badge">
-                        <span>💿</span>
-                        <span id="currentCollectionName">Новий альбом</span>
-                    </div>
-                    <div class="stat-badge">
-                        <span>🎤</span>
-                        <span id="headerPoemsCount">0</span>
-                    </div>
-                    <div class="stat-badge">
-                        <span>📏</span>
-                        <span id="headerLinesCount">0</span>
-                    </div>
-                    <button onclick="showCollectionsModal()" class="btn btn-secondary btn-sm">📂</button>
-                    <button onclick="toggleToolsMenu()" class="btn btn-secondary btn-sm">🛠️</button>
+                <div class="stat-badge">
+                    <span>🎤</span>
+                    <span id="headerPoemsCount">0</span>
+                    <span data-i18n="songs">пісень</span>
                 </div>
+                <div class="stat-badge">
+                    <span>📏</span>
+                    <span id="headerLinesCount">0</span>
+                    <span data-i18n="lines">рядків</span>
+                </div>
+                <button onclick="showCollectionsModal()" class="btn btn-secondary btn-sm">📂</button>
+                <button onclick="toggleToolsMenu()" class="btn btn-secondary btn-sm">🛠️</button>
             </div>
         </div>
     </header>
@@ -63,31 +73,49 @@
     <main class="main">
         <div class="container">
             <nav class="wizard-steps">
-                <div class="step active" onclick="switchTab('setup')" id="tab-setup">⚙️</div>
+                <div class="step active" onclick="switchTab('setup')" id="tab-setup" title="Налаштування">
+                    <span class="step-icon">⚙️</span>
+                    <span class="step-text" data-i18n="settings">Налаштування</span>
+                </div>
                 <div class="step-line"></div>
-                <div class="step" onclick="switchTab('templates')" id="tab-templates">📋</div>
+                <div class="step" onclick="switchTab('templates')" id="tab-templates" title="Шаблони">
+                    <span class="step-icon">📋</span>
+                    <span class="step-text" data-i18n="templates">Шаблони</span>
+                </div>
                 <div class="step-line"></div>
-                <div class="step" onclick="switchTab('generate')" id="tab-generate">🎤</div>
+                <div class="step" onclick="switchTab('generate')" id="tab-generate" title="Генерація">
+                    <span class="step-icon">✨</span>
+                    <span class="step-text" data-i18n="generate">Генерація</span>
+                </div>
                 <div class="step-line"></div>
-                <div class="step" onclick="switchTab('export')" id="tab-export">📥</div>
+                <div class="step" onclick="switchTab('export')" id="tab-export" title="Експорт">
+                    <span class="step-icon">📤</span>
+                    <span class="step-text" data-i18n="export">Експорт</span>
+                </div>
             </nav>
 
             <!-- Tab 1: Setup -->
             <div id="content-setup" class="tab-content active">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">⚙️ Налаштування</h2>
+                        <h2 class="card-title">
+                            <span class="card-icon">⚙️</span>
+                            <span data-i18n="settings">Налаштування</span>
+                        </h2>
                     </div>
                     <div class="grid-2">
                         <div>
-                            <h3 class="section-title">🔌 API Налаштування</h3>
+                            <h3 class="section-title">
+                                <span class="section-icon">🔌</span>
+                                <span data-i18n="apiSettings">API Налаштування</span>
+                            </h3>
                             <div class="form-group">
-                                <label class="form-label">API Provider</label>
+                                <label class="form-label" data-i18n="apiProvider">Провайдер API</label>
                                 <select id="apiProvider" class="form-select">
                                     <option value="gemini">Google Gemini</option>
                                     <option value="openai">OpenAI</option>
-                                    <option value="anthropic">Anthropic Claude</option>
-                                    <option value="custom">Custom URL</option>
+                                    <option value="anthropic">Anthropic</option>
+                                    <option value="custom">Custom</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -95,19 +123,20 @@
                                 <select id="modelName" class="form-select"></select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">API Key (зашифровано)</label>
-                                <input type="password" id="apiKey" class="form-input" placeholder="AIza... або sk-...">
+                                <label class="form-label" data-i18n="apiKey">Ключ API</label>
+                                <div class="input-group">
+                                    <input type="password" id="apiKey" class="form-input" data-i18n-placeholder="enterApiKey" placeholder="Введіть API ключ...">
+                                    <button type="button" class="btn btn-secondary" onclick="toggleApiKeyVisibility()" data-i18n-title="showPassword">👁️</button>
+                                </div>
                             </div>
                             <div id="customUrlBlock" class="form-group" style="display: none;">
                                 <label class="form-label">Custom API URL</label>
                                 <input type="text" id="customUrl" class="form-input" placeholder="https://api.example.com/v1/chat">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">
-                                    Temperature: 
-                                    <span id="tempValue" class="range-value">0.9</span>
-                                </label>
-                                <input type="range" id="temperature" min="0" max="2" step="0.1" value="0.9" class="range-slider">
+                                <label class="form-label" data-i18n="temperature">Температура</label>
+                                <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7" class="form-range">
+                                <div class="range-value" id="temperatureValue">0.7</div>
                                 <div class="range-labels">
                                     <span>Точний</span>
                                     <span>Креативний</span>
@@ -117,42 +146,47 @@
                         </div>
                         
                         <div>
-                            <h3 class="section-title">💿 Параметри альбому</h3>
+                            <h3 class="section-title">
+                                <span class="section-icon">💿</span>
+                                <span data-i18n="albumParams">Параметри альбому</span>
+                            </h3>
                             <div class="form-group">
-                                <label class="form-label">Назва альбому *</label>
-                                <input id="collectionTitle" class="form-input" placeholder="Введіть назву альбому...">
+                                <label class="form-label" data-i18n="albumTitle">Назва альбому</label>
+                                <input id="collectionTitle" class="form-input" data-i18n-placeholder="enterAlbumTitle" placeholder="Введіть назву альбому...">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Тема пісень *</label>
-                                <input id="theme" class="form-input" placeholder="Наприклад: любов, втрата, надія...">
+                                <label class="form-label" data-i18n="artistName">Ім'я виконавця</label>
+                                <input id="artistName" class="form-input" data-i18n-placeholder="enterArtistName" placeholder="Введіть ім'я виконавця...">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Настрій/Емоція</label>
+                                <label class="form-label" data-i18n="mood">Настрій</label>
                                 <select id="mood" class="form-select">
-                                    <option value="радісний">Радісний</option>
-                                    <option value="сумний">Сумний</option>
-                                    <option value="романтичний">Романтичний</option>
-                                    <option value="енергійний">Енергійний</option>
-                                    <option value="меланхолійний">Меланхолійний</option>
-                                    <option value="бунтарський">Бунтарський</option>
-                                    <option value="ліричний">Ліричний</option>
+                                    <option value="happy" data-i18n="moodHappy">Веселий</option>
+                                    <option value="sad" data-i18n="moodSad">Сумний</option>
+                                    <option value="romantic" data-i18n="moodRomantic">Романтичний</option>
+                                    <option value="energetic" data-i18n="moodEnergetic">Енергійний</option>
+                                    <option value="calm" data-i18n="moodCalm">Спокійний</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Музичний жанр</label>
-                                <select id="style" class="form-select">
-                                    <option value="поп">Поп</option>
-                                    <option value="рок">Рок</option>
-                                    <option value="реп">Реп/Хіп-хоп</option>
-                                    <option value="фолк">Фолк</option>
-                                    <option value="r&b">R&B</option>
-                                    <option value="альтернатива">Альтернатива</option>
-                                    <option value="електронна">Електронна</option>
+                                <label class="form-label" data-i18n="genre">Жанр</label>
+                                <select id="genre" class="form-select">
+                                    <option value="pop" data-i18n="genrePop">Поп</option>
+                                    <option value="rock" data-i18n="genreRock">Рок</option>
+                                    <option value="hiphop" data-i18n="genreHiphop">Хіп-хоп</option>
+                                    <option value="electronic" data-i18n="genreElectronic">Електронна</option>
+                                    <option value="jazz" data-i18n="genreJazz">Джаз</option>
+                                    <option value="classical" data-i18n="genreClassical">Класика</option>
+                                    <option value="other" data-i18n="genreOther">Інше</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Додаткові деталі</label>
-                                <textarea id="additionalDetails" class="form-textarea" rows="3" placeholder="Наприклад: швидкий темп, повторюваний приспів, використовувати метафори..."></textarea>
+                                <label class="form-label" data-i18n="albumTheme">Тема альбому</label>
+                                <textarea id="albumTheme" class="form-textarea" rows="3" data-i18n-placeholder="describeAlbumTheme" placeholder="Опишіть тему альбому..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" data-i18n="additionalDetails">Додаткові деталі</label>
+                                <textarea id="additionalDetails" class="form-textarea" rows="3" data-i18n-placeholder="enterAdditionalDetails" placeholder="Наприклад: швидкий темп, повторюваний приспів, використовувати метафори..."></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">
@@ -161,7 +195,7 @@
                                 </label>
                                 <input type="range" id="poemsCount" min="1" max="20" value="5" class="range-slider">
                             </div>
-                            <button onclick="saveSettings()" class="btn btn-primary" style="width: 100%;">💾 Зберегти налаштування</button>
+                            <button onclick="saveSettings()" class="btn btn-primary" data-i18n="saveSettings">Зберегти налаштування</button>
                         </div>
                     </div>
                 </div>
@@ -171,9 +205,13 @@
             <div id="content-templates" class="tab-content">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">📋 Структури пісень</h2>
+                        <h2 class="card-title">
+                            <span class="card-icon">📋</span>
+                            <span data-i18n="songStructures">Структури пісень</span>
+                        </h2>
                     </div>
                     <div id="templatesContent"></div>
+                    <button onclick="showTemplateModal()" class="btn btn-primary" data-i18n="newTemplate">➕ Новий шаблон</button>
                 </div>
             </div>
 
@@ -181,12 +219,20 @@
             <div id="content-generate" class="tab-content">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">🎤 Генерація текстів</h2>
-                        <button onclick="generateAllPoems()" id="btnGenerateAll" class="btn btn-primary">
-                            ⚡ Згенерувати всі пісні
+                        <h2 class="card-title">
+                            <span class="card-icon">✨</span>
+                            <span data-i18n="generation">Генерування</span>
+                        </h2>
+                        <button onclick="generateLyrics()" class="btn btn-primary" id="generateBtn" data-i18n="generateLyrics">
+                            🎵 Згенерувати тексти пісень
                         </button>
                     </div>
-                    <div id="generateContent"></div>
+                    <div id="generatedContent" class="generated-content">
+                        <!-- Generated content will appear here -->
+                    </div>
+                    <div id="noContent" class="empty-state">
+                        <p data-i18n="generatePrompt">Натисніть кнопку "Згенерувати тексти пісень", щоб почати.</p>
+                    </div>
                 </div>
             </div>
 
@@ -194,12 +240,19 @@
             <div id="content-export" class="tab-content">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">📥 Експорт альбому</h2>
+                        <h2 class="card-title">
+                            <span class="card-icon">�</span>
+                            <span data-i18n="export">Експорт</span>
+                        </h2>
                     </div>
                     <div class="export-stats">
                         <div class="stat-card">
                             <div class="stat-value" id="exportStatus">0</div>
                             <div class="stat-label">Пісень згенеровано</div>
+                        </div>
+                        <div id="generationProgress" class="progress-container" style="display: none;">
+                            <div class="progress-bar" id="progressBar"></div>
+                            <div class="progress-text" id="progressText" data-i18n="generatingXofY">Генерація 1 з 5...</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-value" id="totalLines">0</div>
@@ -210,14 +263,19 @@
                             <div class="stat-label">Всього слів</div>
                         </div>
                     </div>
-                    <div class="export-buttons">
-                        <button onclick="exportCollection('txt')" class="btn btn-secondary">📄 Експорт TXT</button>
-                        <button onclick="exportCollection('html')" class="btn btn-secondary">🌐 Експорт HTML</button>
-                        <button onclick="exportCollection('pdf')" class="btn btn-secondary">📕 Експорт PDF</button>
-                        <button onclick="copyAllText()" class="btn btn-secondary">📋 Копіювати весь текст</button>
+                    <div class="export-options">
+                        <button onclick="exportToTXT()" class="btn btn-secondary" data-i18n="exportToTXT">📄 Експортувати у TXT</button>
+                        <button onclick="exportToDOCX()" class="btn btn-secondary" data-i18n="exportToDOCX">📝 Експортувати у DOCX</button>
+                        <button onclick="exportToPDF()" class="btn btn-secondary" data-i18n="exportToPDF">� Експортувати у PDF</button>
                     </div>
-                    <h3 class="section-title">Попередній перегляд:</h3>
-                    <div id="previewContent" class="preview-content"></div>
+                    <button onclick="copyAllText()" class="btn btn-secondary">📋 Копіювати весь текст</button>
+                    <div class="preview-section">
+                        <h3 data-i18n="preview">Попередній перегляд:</h3>
+                        <div id="previewContent" class="preview-content"></div>
+                        <div id="noPreview" class="empty-state">
+                            <p data-i18n="noPreview">Немає даних для перегляду. Спочатку згенеруйте вміст.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -225,6 +283,7 @@
 
     <!-- Scripts: правильний порядок завантаження -->
     <script src="js/core/config.js"></script>
+    <script src="js/core/locale.js"></script>
     <script src="js/core/utils.js"></script>
     <script src="js/services/prompts.js"></script>
     <script src="js/services/storage.js"></script>
