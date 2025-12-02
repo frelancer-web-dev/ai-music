@@ -1,5 +1,5 @@
 // ============================================
-// APP.JS - Головний файл ШІ-Музикант v1.0
+// APP.JS - Головний файл ШІ-Музикант v1.0 (FIXED)
 // ============================================
 
 let currentCollectionId = null;
@@ -18,7 +18,6 @@ window.addEventListener('DOMContentLoaded', async () => {
         
         console.log('✅ Додаток готовий до роботи');
         
-        // Показуємо вітальне повідомлення тільки для нових користувачів
         if (!localStorage.getItem('aimusician_visited')) {
             setTimeout(showWelcomeMessage, 1000);
             localStorage.setItem('aimusician_visited', 'true');
@@ -31,25 +30,16 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 async function initializeApp() {
     try {
-        // Ініціалізуємо IndexedDB
         await Storage.init();
-        
-        // Налаштовуємо слайдери
         setupSliders();
         
-        // Ініціалізуємо провайдера та моделі
         const providerElement = document.getElementById('apiProvider');
         if (providerElement) {
             handleProviderChange({ target: providerElement });
         }
         
-        // Оновлюємо статистику в header
         updateHeaderStats();
-        
-        // Відображаємо шаблони
         displayTemplates();
-        
-        // Відображаємо контент генерації
         displayGenerateContent();
         
     } catch (error) {
@@ -61,18 +51,16 @@ async function initializeApp() {
 // ========== EVENT LISTENERS ==========
 
 function setupEventListeners() {
-    // Налаштування слайдерів
     setupSliders();
     
-    // Провайдер API
     const providerSelect = document.getElementById('apiProvider');
     if (providerSelect) {
         providerSelect.addEventListener('change', handleProviderChange);
     }
     
-    // Автозбереження при зміні полів
+    // ВИПРАВЛЕНО: Правильні ID полів
     const autoSaveFields = [
-        'collectionTitle', 'theme', 'mood', 'style', 
+        'collectionTitle', 'artistName', 'albumTheme', 'mood', 'genre', 
         'additionalDetails', 'apiProvider', 'modelName', 
         'temperature', 'poemsCount'
     ];
@@ -87,7 +75,6 @@ function setupEventListeners() {
         }
     });
     
-    // Збереження перед закриттям
     window.addEventListener('beforeunload', async (e) => {
         if (currentCollectionId && poems.length > 0) {
             try {
@@ -98,7 +85,6 @@ function setupEventListeners() {
         }
     });
     
-    // Закриття меню інструментів при кліку поза ним
     document.addEventListener('click', (e) => {
         const menu = document.getElementById('toolsMenu');
         const toolsBtn = e.target.closest('[onclick*="toggleToolsMenu"]');
@@ -108,7 +94,7 @@ function setupEventListeners() {
     });
 }
 
-// ========== ОПТИМІЗОВАНЕ АВТОЗБЕРЕЖЕННЯ ==========
+// ========== АВТОЗБЕРЕЖЕННЯ ==========
 
 function scheduleAutoSave() {
     if (autoSaveTimer) {
@@ -131,7 +117,7 @@ function scheduleAutoSave() {
 
 function setupSliders() {
     const sliders = [
-        { id: 'temperature', valueId: 'tempValue' },
+        { id: 'temperature', valueId: 'temperatureValue' },
         { id: 'poemsCount', valueId: 'poemsCountValue' }
     ];
     
@@ -176,7 +162,7 @@ function handleProviderChange(e) {
 
 async function saveSettings() {
     const collectionTitle = document.getElementById('collectionTitle').value.trim();
-    const theme = document.getElementById('theme').value.trim();
+    const albumTheme = document.getElementById('albumTheme').value.trim();
     const apiKey = document.getElementById('apiKey').value.trim();
     
     if (!collectionTitle || collectionTitle.length < 2) {
@@ -185,9 +171,9 @@ async function saveSettings() {
         return;
     }
     
-    if (!theme || theme.length < 2) {
-        showToast('❌ Вкажіть тему пісень (мін. 2 символи)', 'error');
-        document.getElementById('theme').focus();
+    if (!albumTheme || albumTheme.length < 2) {
+        showToast('❌ Вкажіть тему альбому (мін. 2 символи)', 'error');
+        document.getElementById('albumTheme').focus();
         return;
     }
     
@@ -207,33 +193,43 @@ async function saveSettings() {
     }
 }
 
+// ВИПРАВЛЕНО: Додано всі поля
 function getSettings() {
     return {
-        apiProvider: document.getElementById('apiProvider').value,
-        modelName: document.getElementById('modelName').value,
-        temperature: parseFloat(document.getElementById('temperature').value),
-        collectionTitle: document.getElementById('collectionTitle').value.trim(),
-        theme: document.getElementById('theme').value.trim(),
-        mood: document.getElementById('mood').value,
-        style: document.getElementById('style').value,
-        additionalDetails: document.getElementById('additionalDetails').value.trim(),
-        poemsCount: parseInt(document.getElementById('poemsCount').value)
+        apiProvider: document.getElementById('apiProvider')?.value || 'gemini',
+        modelName: document.getElementById('modelName')?.value || 'gemini-2.5-flash',
+        temperature: parseFloat(document.getElementById('temperature')?.value || '0.7'),
+        collectionTitle: document.getElementById('collectionTitle')?.value.trim() || '',
+        artistName: document.getElementById('artistName')?.value.trim() || '',
+        theme: document.getElementById('albumTheme')?.value.trim() || '',
+        mood: document.getElementById('mood')?.value || 'happy',
+        style: document.getElementById('genre')?.value || 'pop',
+        additionalDetails: document.getElementById('additionalDetails')?.value.trim() || '',
+        poemsCount: parseInt(document.getElementById('poemsCount')?.value || '5')
     };
 }
 
+// ВИПРАВЛЕНО: Правильні ID полів
 function applySettings(settings) {
     if (!settings) return;
     
-    const fields = [
-        'apiProvider', 'modelName', 'temperature', 
-        'collectionTitle', 'theme', 'mood', 'style', 
-        'additionalDetails', 'poemsCount'
-    ];
+    const fieldMapping = {
+        'apiProvider': 'apiProvider',
+        'modelName': 'modelName',
+        'temperature': 'temperature',
+        'collectionTitle': 'collectionTitle',
+        'artistName': 'artistName',
+        'theme': 'albumTheme',
+        'mood': 'mood',
+        'style': 'genre',
+        'additionalDetails': 'additionalDetails',
+        'poemsCount': 'poemsCount'
+    };
     
-    fields.forEach(field => {
-        const element = document.getElementById(field);
-        if (element && settings[field] !== undefined) {
-            element.value = settings[field];
+    Object.entries(fieldMapping).forEach(([settingKey, elementId]) => {
+        const element = document.getElementById(elementId);
+        if (element && settings[settingKey] !== undefined) {
+            element.value = settings[settingKey];
         }
     });
     
@@ -254,7 +250,7 @@ function applySettings(settings) {
 
 function updateSliderValues() {
     const sliders = [
-        { id: 'temperature', valueId: 'tempValue' },
+        { id: 'temperature', valueId: 'temperatureValue' },
         { id: 'poemsCount', valueId: 'poemsCountValue' }
     ];
     
@@ -266,6 +262,15 @@ function updateSliderValues() {
             valueDisplay.textContent = slider.value;
         }
     });
+}
+
+// ========== ВИДИМІСТЬ API КЛЮЧА ==========
+
+function toggleApiKeyVisibility() {
+    const apiKeyInput = document.getElementById('apiKey');
+    if (apiKeyInput) {
+        apiKeyInput.type = apiKeyInput.type === 'password' ? 'text' : 'password';
+    }
 }
 
 // ========== ЗАВАНТАЖЕННЯ ОСТАННЬОЇ ЗБІРКИ ==========
