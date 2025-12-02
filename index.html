@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" data-i18n="appDescription">
-    <title data-i18n="appTitle">ШІ-Музикант v1.0 - Генератор Текстів Пісень</title>
+    <meta name="description" content="ШІ-Музикант - Генератор текстів пісень">
+    <title>ШІ-Музикант v1.0 - Генератор Текстів Пісень</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="js/core/locale.js"></script>
+    <link rel="stylesheet" href="css/content.css">
 </head>
 <body data-theme="dark">
     <div id="toast-container"></div>
@@ -16,19 +15,12 @@
 
     <header class="header">
         <div class="container header-content">
-            <h1 class="logo" data-i18n="appName">ШІ-Музикант</h1>
-            <div class="language-selector">
-                <select id="language-selector" class="form-select" onchange="LOCALE.setLanguage(this.value)" data-i18n="language">
-                    <option value="uk" data-i18n="ukrainian">Українська</option>
-                    <option value="en" data-i18n="english">English</option>
-                    <option value="ru" data-i18n="russian">Русский</option>
-                </select>
-            </div>
-            <div class="logo">
+            <h1 class="logo" style="margin: 0;">
                 <span class="logo-icon">🎵</span>
                 <span data-i18n="appName">ШІ-Музикант</span>
-                <span class="version" data-i18n="version">v1.0</span>
-            </div>
+                <span class="version" style="font-size: 0.6em; opacity: 0.7;">v1.0</span>
+            </h1>
+            
             <div class="header-stats">
                 <div class="stat-badge">
                     <span>💿</span>
@@ -44,8 +36,8 @@
                     <span id="headerLinesCount">0</span>
                     <span data-i18n="lines">рядків</span>
                 </div>
-                <button onclick="showCollectionsModal()" class="btn btn-secondary btn-sm">📂</button>
-                <button onclick="toggleToolsMenu()" class="btn btn-secondary btn-sm">🛠️</button>
+                <button onclick="showCollectionsModal()" class="btn btn-secondary btn-sm" title="Мої збірки">📂</button>
+                <button onclick="toggleToolsMenu()" class="btn btn-secondary btn-sm" title="Інструменти">🛠️</button>
             </div>
         </div>
     </header>
@@ -60,57 +52,39 @@
         <button onclick="showThesaurus(); hideToolsMenu();" class="tool-btn">
             📖 Синоніми
         </button>
-        <hr>
+        <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid var(--color-border);">
         <button onclick="toggleTheme(); hideToolsMenu();" class="tool-btn">🎨 Змінити тему</button>
         <button onclick="toggleSound(); hideToolsMenu();" class="tool-btn">
             🔔 <span id="soundText">Увімкнути звуки</span>
         </button>
-        <hr>
+        <hr style="margin: 0.5rem 0; border: none; border-top: 1px solid var(--color-border);">
         <button onclick="createBackup(); hideToolsMenu();" class="tool-btn">💾 Створити backup</button>
         <button onclick="restoreBackup(); hideToolsMenu();" class="tool-btn">📥 Відновити backup</button>
     </div>
 
-    <main class="main">
+    <main class="main" style="margin-top: 80px;">
         <div class="container">
             <nav class="wizard-steps">
-                <div class="step active" onclick="switchTab('setup')" id="tab-setup" title="Налаштування">
-                    <span class="step-icon">⚙️</span>
-                    <span class="step-text" data-i18n="settings">Налаштування</span>
-                </div>
+                <div class="step active" onclick="switchTab('setup')" id="tab-setup" title="Налаштування">⚙️</div>
                 <div class="step-line"></div>
-                <div class="step" onclick="switchTab('templates')" id="tab-templates" title="Шаблони">
-                    <span class="step-icon">📋</span>
-                    <span class="step-text" data-i18n="templates">Шаблони</span>
-                </div>
+                <div class="step" onclick="switchTab('templates')" id="tab-templates" title="Шаблони">📋</div>
                 <div class="step-line"></div>
-                <div class="step" onclick="switchTab('generate')" id="tab-generate" title="Генерація">
-                    <span class="step-icon">✨</span>
-                    <span class="step-text" data-i18n="generate">Генерація</span>
-                </div>
+                <div class="step" onclick="switchTab('generate')" id="tab-generate" title="Генерація">✨</div>
                 <div class="step-line"></div>
-                <div class="step" onclick="switchTab('export')" id="tab-export" title="Експорт">
-                    <span class="step-icon">📤</span>
-                    <span class="step-text" data-i18n="export">Експорт</span>
-                </div>
+                <div class="step" onclick="switchTab('export')" id="tab-export" title="Експорт">📤</div>
             </nav>
 
             <!-- Tab 1: Setup -->
             <div id="content-setup" class="tab-content active">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="card-icon">⚙️</span>
-                            <span data-i18n="settings">Налаштування</span>
-                        </h2>
+                        <h2 class="card-title">⚙️ Налаштування</h2>
                     </div>
                     <div class="grid-2">
                         <div>
-                            <h3 class="section-title">
-                                <span class="section-icon">🔌</span>
-                                <span data-i18n="apiSettings">API Налаштування</span>
-                            </h3>
+                            <h3 class="section-title">🔌 API Налаштування</h3>
                             <div class="form-group">
-                                <label class="form-label" data-i18n="apiProvider">Провайдер API</label>
+                                <label class="form-label">Провайдер API</label>
                                 <select id="apiProvider" class="form-select">
                                     <option value="gemini">Google Gemini</option>
                                     <option value="openai">OpenAI</option>
@@ -123,10 +97,10 @@
                                 <select id="modelName" class="form-select"></select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" data-i18n="apiKey">Ключ API</label>
-                                <div class="input-group">
-                                    <input type="password" id="apiKey" class="form-input" data-i18n-placeholder="enterApiKey" placeholder="Введіть API ключ...">
-                                    <button type="button" class="btn btn-secondary" onclick="toggleApiKeyVisibility()" data-i18n-title="showPassword">👁️</button>
+                                <label class="form-label">Ключ API</label>
+                                <div style="display: flex; gap: 0.5rem;">
+                                    <input type="password" id="apiKey" class="form-input" placeholder="Введіть API ключ..." style="flex: 1;">
+                                    <button type="button" class="btn btn-secondary" onclick="toggleApiKeyVisibility()" title="Показати/Приховати">👁️</button>
                                 </div>
                             </div>
                             <div id="customUrlBlock" class="form-group" style="display: none;">
@@ -134,9 +108,10 @@
                                 <input type="text" id="customUrl" class="form-input" placeholder="https://api.example.com/v1/chat">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" data-i18n="temperature">Температура</label>
-                                <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7" class="form-range">
-                                <div class="range-value" id="temperatureValue">0.7</div>
+                                <label class="form-label">
+                                    Температура: <span id="temperatureValue" class="range-value">0.7</span>
+                                </label>
+                                <input type="range" id="temperature" min="0" max="1" step="0.1" value="0.7" class="range-slider">
                                 <div class="range-labels">
                                     <span>Точний</span>
                                     <span>Креативний</span>
@@ -146,47 +121,44 @@
                         </div>
                         
                         <div>
-                            <h3 class="section-title">
-                                <span class="section-icon">💿</span>
-                                <span data-i18n="albumParams">Параметри альбому</span>
-                            </h3>
+                            <h3 class="section-title">💿 Параметри альбому</h3>
                             <div class="form-group">
-                                <label class="form-label" data-i18n="albumTitle">Назва альбому</label>
-                                <input id="collectionTitle" class="form-input" data-i18n-placeholder="enterAlbumTitle" placeholder="Введіть назву альбому...">
+                                <label class="form-label">Назва альбому</label>
+                                <input id="collectionTitle" class="form-input" placeholder="Введіть назву альбому...">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" data-i18n="artistName">Ім'я виконавця</label>
-                                <input id="artistName" class="form-input" data-i18n-placeholder="enterArtistName" placeholder="Введіть ім'я виконавця...">
+                                <label class="form-label">Ім'я виконавця</label>
+                                <input id="artistName" class="form-input" placeholder="Введіть ім'я виконавця...">
                             </div>
                             <div class="form-group">
-                                <label class="form-label" data-i18n="mood">Настрій</label>
+                                <label class="form-label">Настрій</label>
                                 <select id="mood" class="form-select">
-                                    <option value="happy" data-i18n="moodHappy">Веселий</option>
-                                    <option value="sad" data-i18n="moodSad">Сумний</option>
-                                    <option value="romantic" data-i18n="moodRomantic">Романтичний</option>
-                                    <option value="energetic" data-i18n="moodEnergetic">Енергійний</option>
-                                    <option value="calm" data-i18n="moodCalm">Спокійний</option>
+                                    <option value="happy">Веселий</option>
+                                    <option value="sad">Сумний</option>
+                                    <option value="romantic">Романтичний</option>
+                                    <option value="energetic">Енергійний</option>
+                                    <option value="calm">Спокійний</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" data-i18n="genre">Жанр</label>
+                                <label class="form-label">Жанр</label>
                                 <select id="genre" class="form-select">
-                                    <option value="pop" data-i18n="genrePop">Поп</option>
-                                    <option value="rock" data-i18n="genreRock">Рок</option>
-                                    <option value="hiphop" data-i18n="genreHiphop">Хіп-хоп</option>
-                                    <option value="electronic" data-i18n="genreElectronic">Електронна</option>
-                                    <option value="jazz" data-i18n="genreJazz">Джаз</option>
-                                    <option value="classical" data-i18n="genreClassical">Класика</option>
-                                    <option value="other" data-i18n="genreOther">Інше</option>
+                                    <option value="pop">Поп</option>
+                                    <option value="rock">Рок</option>
+                                    <option value="hiphop">Хіп-хоп</option>
+                                    <option value="electronic">Електронна</option>
+                                    <option value="jazz">Джаз</option>
+                                    <option value="classical">Класика</option>
+                                    <option value="other">Інше</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" data-i18n="albumTheme">Тема альбому</label>
-                                <textarea id="albumTheme" class="form-textarea" rows="3" data-i18n-placeholder="describeAlbumTheme" placeholder="Опишіть тему альбому..."></textarea>
+                                <label class="form-label">Тема альбому</label>
+                                <textarea id="albumTheme" class="form-textarea" rows="3" placeholder="Опишіть тему альбому..."></textarea>
                             </div>
                             <div class="form-group">
-                                <label class="form-label" data-i18n="additionalDetails">Додаткові деталі</label>
-                                <textarea id="additionalDetails" class="form-textarea" rows="3" data-i18n-placeholder="enterAdditionalDetails" placeholder="Наприклад: швидкий темп, повторюваний приспів, використовувати метафори..."></textarea>
+                                <label class="form-label">Додаткові деталі</label>
+                                <textarea id="additionalDetails" class="form-textarea" rows="3" placeholder="Наприклад: швидкий темп, повторюваний приспів, використовувати метафори..."></textarea>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">
@@ -195,7 +167,7 @@
                                 </label>
                                 <input type="range" id="poemsCount" min="1" max="20" value="5" class="range-slider">
                             </div>
-                            <button onclick="saveSettings()" class="btn btn-primary" data-i18n="saveSettings">Зберегти налаштування</button>
+                            <button onclick="saveSettings()" class="btn btn-primary" style="width: 100%;">💾 Зберегти налаштування</button>
                         </div>
                     </div>
                 </div>
@@ -205,13 +177,9 @@
             <div id="content-templates" class="tab-content">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="card-icon">📋</span>
-                            <span data-i18n="songStructures">Структури пісень</span>
-                        </h2>
+                        <h2 class="card-title">📋 Структури пісень</h2>
                     </div>
                     <div id="templatesContent"></div>
-                    <button onclick="showTemplateModal()" class="btn btn-primary" data-i18n="newTemplate">➕ Новий шаблон</button>
                 </div>
             </div>
 
@@ -219,19 +187,20 @@
             <div id="content-generate" class="tab-content">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="card-icon">✨</span>
-                            <span data-i18n="generation">Генерування</span>
-                        </h2>
-                        <button onclick="generateLyrics()" class="btn btn-primary" id="generateBtn" data-i18n="generateLyrics">
+                        <h2 class="card-title">✨ Генерування</h2>
+                        <button onclick="generateLyrics()" class="btn btn-primary" id="generateBtn">
                             🎵 Згенерувати тексти пісень
                         </button>
                     </div>
-                    <div id="generatedContent" class="generated-content">
-                        <!-- Generated content will appear here -->
+                    
+                    <div id="generationProgress" style="display: none; background: rgba(76, 175, 80, 0.1); padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; border: 1px solid var(--color-accent);">
+                        <p id="progressText" style="margin: 0; color: var(--color-accent); font-weight: 600;">Генерація...</p>
                     </div>
-                    <div id="noContent" class="empty-state">
-                        <p data-i18n="generatePrompt">Натисніть кнопку "Згенерувати тексти пісень", щоб почати.</p>
+                    
+                    <div id="generatedContent" style="display: none;"></div>
+                    
+                    <div id="noContent" class="empty-state" style="text-align: center; padding: 3rem; color: var(--color-text-tertiary);">
+                        <p style="font-size: 1.1rem;">Натисніть кнопку "Згенерувати тексти пісень", щоб почати.</p>
                     </div>
                 </div>
             </div>
@@ -240,19 +209,12 @@
             <div id="content-export" class="tab-content">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">
-                            <span class="card-icon">�</span>
-                            <span data-i18n="export">Експорт</span>
-                        </h2>
+                        <h2 class="card-title">📤 Експорт</h2>
                     </div>
                     <div class="export-stats">
                         <div class="stat-card">
                             <div class="stat-value" id="exportStatus">0</div>
                             <div class="stat-label">Пісень згенеровано</div>
-                        </div>
-                        <div id="generationProgress" class="progress-container" style="display: none;">
-                            <div class="progress-bar" id="progressBar"></div>
-                            <div class="progress-text" id="progressText" data-i18n="generatingXofY">Генерація 1 з 5...</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-value" id="totalLines">0</div>
@@ -263,17 +225,20 @@
                             <div class="stat-label">Всього слів</div>
                         </div>
                     </div>
-                    <div class="export-options">
-                        <button onclick="exportToTXT()" class="btn btn-secondary" data-i18n="exportToTXT">📄 Експортувати у TXT</button>
-                        <button onclick="exportToDOCX()" class="btn btn-secondary" data-i18n="exportToDOCX">📝 Експортувати у DOCX</button>
-                        <button onclick="exportToPDF()" class="btn btn-secondary" data-i18n="exportToPDF">� Експортувати у PDF</button>
+                    
+                    <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                        <button onclick="exportToTXT()" class="btn btn-secondary" style="flex: 1; min-width: 200px;">📄 Експортувати у TXT</button>
+                        <button onclick="exportToDOCX()" class="btn btn-secondary" style="flex: 1; min-width: 200px;">📝 Експортувати у DOCX</button>
+                        <button onclick="exportToPDF()" class="btn btn-secondary" style="flex: 1; min-width: 200px;">📕 Експортувати у PDF</button>
                     </div>
-                    <button onclick="copyAllText()" class="btn btn-secondary">📋 Копіювати весь текст</button>
+                    
+                    <button onclick="copyAllText()" class="btn btn-secondary" style="width: 100%; margin-bottom: 2rem;">📋 Копіювати весь текст</button>
+                    
                     <div class="preview-section">
-                        <h3 data-i18n="preview">Попередній перегляд:</h3>
-                        <div id="previewContent" class="preview-content"></div>
-                        <div id="noPreview" class="empty-state">
-                            <p data-i18n="noPreview">Немає даних для перегляду. Спочатку згенеруйте вміст.</p>
+                        <h3 style="margin-bottom: 1rem;">Попередній перегляд:</h3>
+                        <div id="previewContent" class="preview-content" style="display: none;"></div>
+                        <div id="noPreview" class="empty-state" style="text-align: center; padding: 2rem; color: var(--color-text-tertiary);">
+                            <p>Немає даних для перегляду. Спочатку згенеруйте вміст.</p>
                         </div>
                     </div>
                 </div>
@@ -281,9 +246,8 @@
         </div>
     </main>
 
-    <!-- Scripts: правильний порядок завантаження -->
+    <!-- Scripts -->
     <script src="js/core/config.js"></script>
-    <script src="js/core/locale.js"></script>
     <script src="js/core/utils.js"></script>
     <script src="js/services/prompts.js"></script>
     <script src="js/services/storage.js"></script>
