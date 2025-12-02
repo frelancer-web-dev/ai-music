@@ -1,0 +1,284 @@
+/* ============================================
+   CONTENT.CSS - Контент стилі ШІ-Поет v1.0
+   ============================================ */
+
+/* ===== TEMPLATES GRID ===== */
+.templates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.template-item {
+    background: var(--color-bg-secondary);
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    border: 2px solid var(--color-border);
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.template-item:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+}
+
+.template-item.selected {
+    border-color: var(--color-accent);
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.template-item.selected::before {
+    content: '✓';
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 24px;
+    height: 24px;
+    background: var(--color-accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 0.875rem;
+}
+
+.template-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-bottom: 0.5rem;
+}
+
+.template-description {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.6;
+}
+
+.template-example {
+    background: var(--color-bg-tertiary);
+    padding: 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+    color: var(--color-text-tertiary);
+    font-style: italic;
+    border-left: 3px solid var(--color-accent);
+    white-space: pre-line;
+}
+
+/* ===== POEMS LIST ===== */
+.poems-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.poem-item {
+    background: var(--color-bg-secondary);
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    border-left: 3px solid var(--color-accent);
+    transition: all 0.3s;
+}
+
+.poem-item:hover {
+    background: var(--color-bg-tertiary);
+}
+
+.poem-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.poem-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    flex: 1;
+}
+
+.poem-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.poem-meta {
+    display: flex;
+    gap: 1rem;
+    color: var(--color-text-tertiary);
+    font-size: 0.8125rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.poem-content {
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    font-family: Georgia, serif;
+}
+
+/* ===== PREVIEW CONTENT ===== */
+.preview-content {
+    background: var(--color-bg-secondary);
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.preview-poem {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.preview-poem:last-child {
+    border-bottom: none;
+}
+
+.preview-poem-title {
+    color: var(--color-accent);
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.preview-poem-content {
+    color: var(--color-text-secondary);
+    line-height: 2;
+    white-space: pre-wrap;
+    text-align: center;
+    font-family: Georgia, serif;
+    font-size: 1rem;
+}
+
+/* ===== PROJECT LIST ===== */
+.project-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.project-item {
+    background: var(--color-bg-secondary);
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.project-item:hover {
+    background: var(--color-bg-tertiary);
+    border-color: var(--color-accent);
+}
+
+.project-item.active {
+    border-color: var(--color-accent);
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.project-info {
+    flex: 1;
+}
+
+.project-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.project-meta {
+    font-size: 0.8125rem;
+    color: var(--color-text-tertiary);
+}
+
+.project-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* ===== СТИЛІЗАЦІЯ ДЛЯ ВІРШІВ ===== */
+.poem-verse {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.poem-stanza {
+    margin-bottom: 1.5rem;
+}
+
+.poem-line {
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+/* ===== RHYME HELPER STYLES ===== */
+#rhymeResults, #synonymResults, #meterResults {
+    animation: fadeIn 0.3s ease;
+}
+
+#rhymesList, #synonymsList {
+    animation: fadeIn 0.4s ease;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    .templates-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .poem-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .poem-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .preview-content {
+        padding: 1rem;
+    }
+    
+    .project-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .project-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
+
+@media (max-width: 480px) {
+    .poem-item {
+        padding: 1rem;
+    }
+    
+    .preview-poem-title {
+        font-size: 1.125rem;
+    }
+    
+    .preview-poem-content {
+        font-size: 0.9375rem;
+    }
+}
