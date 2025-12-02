@@ -1,5 +1,5 @@
 // ============================================
-// GENERATOR.JS - Генерація текстів пісень
+// GENERATOR.JS - Генерація текстів пісень (FIXED)
 // ============================================
 
 let isGeneratingAll = false;
@@ -97,6 +97,11 @@ async function generatePoem(poemNumber) {
 
 // ========== ГЕНЕРАЦІЯ ВСІХ ПІСЕНЬ ==========
 
+// ВИПРАВЛЕНО: Додано функцію generateLyrics
+async function generateLyrics() {
+    await generateAllPoems();
+}
+
 async function generateAllPoems() {
     if (isGeneratingAll) {
         shouldStop = true;
@@ -111,7 +116,7 @@ async function generateAllPoems() {
         return;
     }
     
-    const btn = document.getElementById('btnGenerateAll');
+    const btn = document.getElementById('generateBtn');
     if (!btn) return;
     
     isGeneratingAll = true;
@@ -124,6 +129,12 @@ async function generateAllPoems() {
     const total = settings.poemsCount;
     let successCount = 0;
     
+    // Показуємо прогрес
+    const progressDiv = document.getElementById('generationProgress');
+    if (progressDiv) {
+        progressDiv.style.display = 'block';
+    }
+    
     for (let i = 1; i <= total; i++) {
         if (shouldStop) {
             showToast(`⏹️ Зупинено. Згенеровано: ${successCount}/${total}`, 'warning');
@@ -132,6 +143,12 @@ async function generateAllPoems() {
         
         if (poems.find(p => p.number === i)) {
             continue;
+        }
+        
+        // Оновлюємо прогрес
+        const progressText = document.getElementById('progressText');
+        if (progressText) {
+            progressText.textContent = `Генерація ${i} з ${total}...`;
         }
         
         const success = await generatePoem(i);
@@ -155,10 +172,17 @@ async function generateAllPoems() {
         }
     }
     
+    // Ховаємо прогрес
+    if (progressDiv) {
+        progressDiv.style.display = 'none';
+    }
+    
     resetGenerateAllButton();
     
     if (successCount > 0) {
         showToast(`✅ Завершено!\n\nЗгенеровано: ${successCount}/${total}`, 'success', 10000);
+        // Автоматично переключаємо на вкладку експорту
+        switchTab('export');
     }
 }
 
@@ -166,9 +190,9 @@ function resetGenerateAllButton() {
     isGeneratingAll = false;
     shouldStop = false;
     
-    const btn = document.getElementById('btnGenerateAll');
+    const btn = document.getElementById('generateBtn');
     if (btn) {
-        btn.textContent = '⚡ Згенерувати всі пісні';
+        btn.textContent = '🎵 Згенерувати тексти пісень';
         btn.classList.remove('btn-danger');
         btn.classList.add('btn-primary');
     }
@@ -177,15 +201,26 @@ function resetGenerateAllButton() {
 // ========== ВІДОБРАЖЕННЯ ==========
 
 function displayGenerateContent() {
-    const container = document.getElementById('generateContent');
+    const container = document.getElementById('generatedContent');
+    const noContent = document.getElementById('noContent');
+    
     if (!container) return;
     
     const settings = getSettings();
     const total = settings.poemsCount;
     const completed = poems.length;
     
+    if (completed === 0) {
+        if (noContent) noContent.style.display = 'block';
+        container.style.display = 'none';
+        return;
+    }
+    
+    if (noContent) noContent.style.display = 'none';
+    container.style.display = 'block';
+    
     let html = `
-        <div class="progress-container">
+        <div class="progress-container" style="margin-bottom: 2rem;">
             <h3>📊 Прогрес генерації</h3>
             <p>Згенеровано: <strong style="color: var(--color-accent);">${completed}/${total}</strong> пісень</p>
         </div>
